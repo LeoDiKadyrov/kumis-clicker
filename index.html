@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kumis Clicker</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <div class="kumis-counter">
+                <span id="kumis-count">0</span> кумыса
+            </div>
+            <div class="kps-counter">
+                <span id="kps-count">0</span> кумыса/сек
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="kumis-container">
+                <img id="kumis-image" src="images/kumis.png" alt="Kumis" class="kumis-image">
+                <div class="click-effect"></div>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button id="upgrades-btn" class="menu-button">Улучшения</button>
+            <button id="achievements-btn" class="menu-button">Достижения</button>
+        </div>
+    </div>
+
+    <!-- Mute Button -->
+    <button id="mute-btn" class="mute-button">🔊</button>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <h2>Kumis Clicker</h2>
+            <div class="loading-spinner"></div>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <!-- Upgrades Modal -->
+    <div id="upgrades-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Улучшения</h2>
+            <div id="upgrades-container" class="upgrades-container">
+                <!-- Upgrades will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Modal -->
+    <div id="achievements-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Достижения</h2>
+            <div id="achievements-container" class="achievements-container">
+                <!-- Achievements will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Alert -->
+    <div id="achievement-alert" class="achievement-alert">
+        <div class="alert-content">
+            <h3>Новое достижение!</h3>
+            <p id="achievement-name"></p>
+            <p id="achievement-description"></p>
+        </div>
+    </div>
+
+    <audio id="click-sound" src="sounds/click.wav"></audio>
+    <audio id="background-music" src="sounds/background.m4a" type="audio/mp4" preload="none" loop></audio>
+
+    <script src="game.js"></script>
+</body>
+</html> 
