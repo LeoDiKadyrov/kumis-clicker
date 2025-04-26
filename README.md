@@ -109,4 +109,4 @@ This project is open source and available under the MIT License.
 Created by LeoDiKadyrov
 
 ## 🎮 Play Now
-Visit [[GitHub Pages URL](https://leodikadyrov.github.io/kumis-clicker/)] to play the game online! Visit [GitHub Pages URL] to play the game online! 
+Visit [[GitHub Pages URL](https://leodikadyrov.github.io/kumis-clicker/)] to play the game online! 
