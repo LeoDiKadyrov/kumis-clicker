@@ -34,12 +34,19 @@ class KumisGame {
             this.backgroundMusic.volume = 0.3;
         }
 
+        // Initialize game components
         this.initializeGame();
         this.loadGame();
+        
+        // Ensure UI is properly updated after loading
+        this.updateKumisPerSecond();
+        this.renderGenerators();
+        this.updateUI();
+        
+        // Setup remaining components
         this.setupEventListeners();
         this.startGameLoop();
         this.hideLoadingScreen();
-        this.updateUI();
     }
 
     hideLoadingScreen() {
@@ -783,13 +790,16 @@ class KumisGame {
 
             // Initialize any missing generators
             this.generators.forEach(generator => {
-                if (!this.ownedGenerators[generator.id]) {
+                if (typeof this.ownedGenerators[generator.id] === 'undefined') {
                     this.ownedGenerators[generator.id] = 0;
                 }
             });
 
+            // Update game state
             this.updateKumisPerSecond();
             this.renderGenerators();
+            this.renderUpgrades();
+            this.renderAchievements();
         }
     }
 
