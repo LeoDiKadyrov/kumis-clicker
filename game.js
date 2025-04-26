@@ -9,7 +9,13 @@ class KumisGame {
         this.ownedUpgrades = new Set();
         this.unlockedAchievements = new Set();
         this.isMuted = false;
-        this.currentLang = localStorage.getItem('kumisGameLang') || 'ru';
+        this.currentLang = 'ru'; // Set default to Russian
+        
+        // Load language preference if it exists
+        const savedLang = localStorage.getItem('kumisGameLang');
+        if (savedLang) {
+            this.currentLang = savedLang;
+        }
         
         // Prestige-related properties
         this.prestigePoints = 0;
@@ -480,10 +486,83 @@ class KumisGame {
         const nameElement = document.getElementById('achievement-name');
         const descriptionElement = document.getElementById('achievement-description');
 
-        const achievementData = getText(`achievements_data.${achievement.id}`, this.currentLang);
-        
-        nameElement.textContent = achievementData.name;
-        descriptionElement.textContent = achievementData.description;
+        // Define achievement data with translations
+        const achievementData = {
+            'first-bowl': {
+                en: {
+                    name: 'First Bowl',
+                    description: 'Click 50 times'
+                },
+                ru: {
+                    name: 'Первая Пиала',
+                    description: 'Кликните 50 раз'
+                }
+            },
+            'kumis-novice': {
+                en: {
+                    name: 'Kumis Novice',
+                    description: 'Click 100 times'
+                },
+                ru: {
+                    name: 'Новичок Кумыса',
+                    description: 'Кликните 100 раз'
+                }
+            },
+            'guest-arrived': {
+                en: {
+                    name: 'Guest Arrived',
+                    description: 'Click 500 times'
+                },
+                ru: {
+                    name: 'Гость Прибыл',
+                    description: 'Кликните 500 раз'
+                }
+            },
+            'dombyra-sound': {
+                en: {
+                    name: 'Dombyra Sound',
+                    description: 'Click 2,500 times'
+                },
+                ru: {
+                    name: 'Звук Домбры',
+                    description: 'Кликните 2,500 раз'
+                }
+            },
+            'golden-eagle': {
+                en: {
+                    name: 'Golden Eagle',
+                    description: 'Click 25,000 times'
+                },
+                ru: {
+                    name: 'Золотой Орёл',
+                    description: 'Кликните 25,000 раз'
+                }
+            },
+            'great-steppe': {
+                en: {
+                    name: 'Great Steppe',
+                    description: 'Click 50,000 times'
+                },
+                ru: {
+                    name: 'Великая Степь',
+                    description: 'Кликните 50,000 раз'
+                }
+            },
+            'shanyrak': {
+                en: {
+                    name: 'Shanyrak',
+                    description: 'Click 100,000 times'
+                },
+                ru: {
+                    name: 'Шанырак',
+                    description: 'Кликните 100,000 раз'
+                }
+            }
+        };
+
+        const data = achievementData[achievement.id][this.currentLang];
+        nameElement.textContent = data.name;
+        descriptionElement.textContent = data.description;
 
         alert.style.display = 'block';
 
@@ -657,20 +736,74 @@ class KumisGame {
 
     renderGenerators() {
         const generatorsContainer = document.getElementById('generators-container');
-        const statsContainer = document.querySelector('.stats-container');
-        
-        if (!generatorsContainer || !statsContainer) {
-            console.warn('Required containers not found. Skipping generator rendering.');
+        if (!generatorsContainer) {
+            console.warn('Generators container not found');
             return;
         }
 
-        generatorsContainer.innerHTML = `<h2>${getText('generators', this.currentLang)}</h2>`;
+        // Create a section for generators if it doesn't exist
+        let generatorsSection = document.querySelector('.generators-section');
+        if (!generatorsSection) {
+            generatorsSection = document.createElement('div');
+            generatorsSection.className = 'generators-section';
+            generatorsContainer.appendChild(generatorsSection);
+        }
+
+        // Clear existing content
+        generatorsSection.innerHTML = `<h2>${getText('generators', this.currentLang)}</h2>`;
+
+        // Create container for generator items
+        const generatorsList = document.createElement('div');
+        generatorsList.className = 'generators-list';
+
+        const generatorData = {
+            mare: {
+                en: {
+                    name: 'Mare',
+                    description: 'A reliable kumis producer'
+                },
+                ru: {
+                    name: 'Кобыла',
+                    description: 'Надёжный производитель кумыса'
+                }
+            },
+            herd: {
+                en: {
+                    name: 'Herd',
+                    description: 'A group of mares working together'
+                },
+                ru: {
+                    name: 'Табун',
+                    description: 'Группа кобыл, работающих вместе'
+                }
+            },
+            farm: {
+                en: {
+                    name: 'Farm',
+                    description: 'Organized kumis production'
+                },
+                ru: {
+                    name: 'Ферма',
+                    description: 'Организованное производство кумыса'
+                }
+            },
+            factory: {
+                en: {
+                    name: 'Factory',
+                    description: 'Industrial-scale kumis production'
+                },
+                ru: {
+                    name: 'Фабрика',
+                    description: 'Промышленное производство кумыса'
+                }
+            }
+        };
 
         for (const generator of this.generators) {
-            const owned = this.ownedGenerators[generator.id];
+            const owned = this.ownedGenerators[generator.id] || 0;
             const cost = this.calculateGeneratorCost(generator);
             const production = (generator.baseProduction * owned).toFixed(1);
-            const genData = getText(`generators_data.${generator.id}`, this.currentLang);
+            const genData = generatorData[generator.id][this.currentLang];
 
             const generatorElement = document.createElement('div');
             generatorElement.className = 'generator';
@@ -682,14 +815,16 @@ class KumisGame {
                     <p>${getText('owned', this.currentLang)}: ${owned} (${getText('total', this.currentLang)}: ${production} ${getText('kumisPerSecond', this.currentLang)})</p>
                 </div>
                 <div class="generator-purchase">
-                    <p>${getText('cost', this.currentLang)}: ${cost} ${getText('kumis', this.currentLang)}</p>
+                    <p>${getText('cost', this.currentLang)}: ${this.formatNumber(cost)} ${getText('kumis', this.currentLang)}</p>
                     <button class="buy-generator" data-id="${generator.id}" ${this.kumisCount < cost ? 'disabled' : ''}>
                         ${getText('buy', this.currentLang)}
                     </button>
                 </div>
             `;
-            generatorsContainer.appendChild(generatorElement);
+            generatorsList.appendChild(generatorElement);
         }
+
+        generatorsSection.appendChild(generatorsList);
     }
 
     calculatePrestigePoints() {

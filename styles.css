@@ -103,7 +103,10 @@ body {
     display: flex;
     justify-content: center;
     gap: 20px;
-    margin-top: 20px;
+    margin: 20px auto;
+    padding: 0 15px;
+    max-width: 100%;
+    flex-wrap: wrap;
 }
 
 .menu-button {
@@ -119,7 +122,8 @@ body {
     backdrop-filter: blur(var(--blur-amount));
     -webkit-backdrop-filter: blur(var(--blur-amount));
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    min-width: 140px;
+    text-align: center;
 }
 
 .menu-button:hover {
@@ -247,6 +251,72 @@ body {
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+
+    .kumis-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 15px;
+    }
+
+    /* Adjust text sizes for mobile */
+    .upgrade h3, .achievement h3 {
+        font-size: 1.2em;
+    }
+
+    .upgrade p, .achievement p {
+        font-size: 0.9em;
+    }
+
+    .modal h2 {
+        font-size: 1.5em;
+    }
+
+    .kumis-counter, .kps-counter {
+        font-size: 1.1em;
+    }
+
+    /* Make sure modals are scrollable on mobile */
+    .upgrades-container, .achievements-container {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    /* Add some spacing between items */
+    .upgrade, .achievement {
+        margin-bottom: 10px;
+    }
+
+    .lang-button {
+        top: 80px;
+        right: 20px;
+    }
+
+    /* Button adjustments for tablets */
+    .buttons-container {
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .menu-button {
+        padding: 10px 20px;
+        font-size: 1em;
+        min-width: 120px;
+    }
+
+    /* Achievement Alert Mobile Styles */
     .achievement-alert {
         top: auto;
         bottom: 20px;
@@ -265,6 +335,22 @@ body {
             transform: translateX(50%) translateY(0);
             opacity: 1;
         }
+    }
+}
+
+@media (max-width: 480px) {
+    /* Additional adjustments for phones */
+    .buttons-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .menu-button {
+        width: 100%;
+        max-width: 280px;
     }
 }
 
@@ -525,62 +611,6 @@ body {
     transform: scale(1.1);
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Mobile Responsive Adjustments */
-@media (max-width: 768px) {
-    .game-container {
-        padding: 10px;
-    }
-
-    .kumis-image {
-        width: 200px;
-        height: 200px;
-    }
-
-    .header {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-        padding: 15px;
-    }
-
-    /* Adjust text sizes for mobile */
-    .upgrade h3, .achievement h3 {
-        font-size: 1.2em;
-    }
-
-    .upgrade p, .achievement p {
-        font-size: 0.9em;
-    }
-
-    .modal h2 {
-        font-size: 1.5em;
-    }
-
-    .kumis-counter, .kps-counter {
-        font-size: 1.1em;
-    }
-
-    /* Make sure modals are scrollable on mobile */
-    .upgrades-container, .achievements-container {
-        max-height: 60vh;
-        overflow-y: auto;
-    }
-
-    /* Add some spacing between items */
-    .upgrade, .achievement {
-        margin-bottom: 10px;
-    }
-
-    .lang-button {
-        top: 80px;
-        right: 20px;
-    }
 }
 
 /* Scrollbar Styles */
