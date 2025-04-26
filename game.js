@@ -361,6 +361,20 @@ class KumisGame {
             }
         });
 
+        // Add generator upgrade listeners
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('upgrade-generator')) {
+                const generatorId = e.target.dataset.id;
+                if (generatorId) {
+                    const success = this.upgradeGenerator(generatorId);
+                    if (success) {
+                        this.updateUI();
+                        this.renderGenerators();
+                    }
+                }
+            }
+        });
+
         // Start background music if autoplay is allowed
         if (backgroundMusic) {
             backgroundMusic.volume = 0.3; // Set lower volume for background music
@@ -703,7 +717,7 @@ class KumisGame {
     }
 
     calculateGeneratorCost(generator, amount = 1) {
-        const owned = this.ownedGenerators[generator.id];
+        const owned = this.ownedGenerators[generator.id] || 0;
         let totalCost = 0;
         for (let i = 0; i < amount; i++) {
             totalCost += Math.floor(generator.baseCost * Math.pow(1.15, owned + i));
@@ -759,42 +773,42 @@ class KumisGame {
         const generatorData = {
             mare: {
                 en: {
-                    name: 'Mare',
-                    description: 'A reliable kumis producer'
+                    name: 'Nomad with Bidon',
+                    description: 'A nomad carrying a traditional milk container'
                 },
                 ru: {
-                    name: 'Кобыла',
-                    description: 'Надёжный производитель кумыса'
+                    name: 'Кочевник с бидоном',
+                    description: 'Кочевник с традиционным контейнером для молока'
                 }
             },
             herd: {
                 en: {
-                    name: 'Herd',
-                    description: 'A group of mares working together'
+                    name: 'Mare',
+                    description: 'A reliable kumis producer'
                 },
                 ru: {
-                    name: 'Табун',
-                    description: 'Группа кобыл, работающих вместе'
+                    name: 'Кобылица',
+                    description: 'Надёжный производитель кумыса'
                 }
             },
             farm: {
                 en: {
-                    name: 'Farm',
-                    description: 'Organized kumis production'
+                    name: 'Young Shepherd',
+                    description: 'A skilled young herder'
                 },
                 ru: {
-                    name: 'Ферма',
-                    description: 'Организованное производство кумыса'
+                    name: 'Юный пастух',
+                    description: 'Умелый молодой пастух'
                 }
             },
             factory: {
                 en: {
-                    name: 'Factory',
-                    description: 'Industrial-scale kumis production'
+                    name: 'Wise Aksakal',
+                    description: 'An elder with ancient wisdom'
                 },
                 ru: {
-                    name: 'Фабрика',
-                    description: 'Промышленное производство кумыса'
+                    name: 'Мудрый аксакал',
+                    description: 'Старейшина с древней мудростью'
                 }
             }
         };
@@ -825,6 +839,20 @@ class KumisGame {
         }
 
         generatorsSection.appendChild(generatorsList);
+    }
+
+    upgradeGenerator(generatorId) {
+        const generator = this.generators.find(g => g.id === generatorId);
+        if (!generator || this.ownedGenerators[generatorId] === 0 || this.kumisCount < this.calculateGeneratorCost(generator)) {
+            return false;
+        }
+
+        this.kumisCount -= this.calculateGeneratorCost(generator);
+        this.ownedGenerators[generator.id]++;
+        this.updateKumisPerSecond();
+        this.renderGenerators();
+        this.saveGame();
+        return true;
     }
 
     calculatePrestigePoints() {
@@ -858,9 +886,6 @@ class KumisGame {
         // Reset upgrades and generators
         this.ownedUpgrades = new Set();
         this.ownedGenerators = {};
-        this.generators.forEach(generator => {
-            this.ownedGenerators[generator.id] = 0;
-        });
 
         // Keep achievements
         // this.unlockedAchievements remains unchanged
@@ -883,7 +908,7 @@ class KumisGame {
         if (this.prestigeUpgrades.has('heritage')) {
             // Heritage upgrade: Keep 10% of previous generators
             this.generators.forEach(generator => {
-                const previousOwned = this.ownedGenerators[generator.id];
+                const previousOwned = this.ownedGenerators[generator.id] || 0;
                 this.ownedGenerators[generator.id] = Math.floor(previousOwned * 0.1);
             });
         }
@@ -898,7 +923,6 @@ class KumisGame {
             unlockedAchievements: Array.from(this.unlockedAchievements),
             ownedGenerators: this.ownedGenerators,
             isMuted: this.isMuted,
-            // Add prestige-related data
             prestigePoints: this.prestigePoints,
             totalPrestigePoints: this.totalPrestigePoints,
             prestigeUpgrades: Array.from(this.prestigeUpgrades),
@@ -924,13 +948,6 @@ class KumisGame {
             this.totalPrestigePoints = gameState.totalPrestigePoints || 0;
             this.prestigeUpgrades = new Set(gameState.prestigeUpgrades || []);
             this.lifetimeKumis = gameState.lifetimeKumis || 0;
-
-            // Initialize any missing generators
-            this.generators.forEach(generator => {
-                if (typeof this.ownedGenerators[generator.id] === 'undefined') {
-                    this.ownedGenerators[generator.id] = 0;
-                }
-            });
 
             // Update game state
             this.updateKumisPerSecond();
