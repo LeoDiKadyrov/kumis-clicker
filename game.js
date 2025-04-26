@@ -480,8 +480,10 @@ class KumisGame {
         const nameElement = document.getElementById('achievement-name');
         const descriptionElement = document.getElementById('achievement-description');
 
-        nameElement.textContent = achievement.name;
-        descriptionElement.textContent = achievement.description;
+        const achievementData = getText(`achievements_data.${achievement.id}`, this.currentLang);
+        
+        nameElement.textContent = achievementData.name;
+        descriptionElement.textContent = achievementData.description;
 
         alert.style.display = 'block';
 
